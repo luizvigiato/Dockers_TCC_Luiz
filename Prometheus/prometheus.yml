@@ -1,0 +1,15 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 1s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ["localhost:9090"]
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['192.168.4.51:9100']
+  - job_name: 'postgres-exporter'
+    static_configs:
+      - targets: ['192.168.4.51:9187']
+
