@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:14
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_USER: luiz
+      POSTGRES_DB: work_test
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter
+    ports:
+      - 9187:9187
+    environment:
+      DATA_SOURCE_NAME: "postgresql://luiz:12345@192.168.4.51:5433/work_test?sslmode=disable"
+
+  node-exporter:
+    image: prom/node-exporter
+    ports:
+      - 9100:9100
